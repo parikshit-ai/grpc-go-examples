@@ -18,6 +18,11 @@ func main() {
 
 	c := greetpb.NewGreetServiceClient(cc)
 	fmt.Printf("server created %v", c)
+	doUnary(c)
+}
+
+func doUnary(c greetpb.GreetServiceClient) {
+	fmt.Println("calling doUnary in RPC..")
 	req := &greetpb.GreetRequest{
 		Request: &greetpb.Greeting{
 			FirstName: "Pari",
