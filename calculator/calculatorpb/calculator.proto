@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package= "calculatorpb";
+
+message Request {
+    int32 a = 1;
+    int32 b = 2;
+}
+
+message Response {
+    int32 ans = 1;
+}
+
+service Calculate {
+    // Unary
+    rpc Add(Request) returns (Response) {};
+}
