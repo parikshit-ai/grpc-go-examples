@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -17,5 +18,15 @@ func main() {
 
 	c := greetpb.NewGreetServiceClient(cc)
 	fmt.Printf("server created %v", c)
-
+	req := &greetpb.GreetRequest{
+		Request: &greetpb.Greeting{
+			FirstName: "Pari",
+			LastName:  "Singh",
+		},
+	}
+	res, err := c.Greet(context.Background(), req)
+	if err != nil {
+		log.Fatalln("UNexpectEd Error while fetcing the data ", err)
+	}
+	fmt.Println(res)
 }
