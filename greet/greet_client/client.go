@@ -31,7 +31,7 @@ func doUnary(c greetpb.GreetServiceClient) {
 	}
 	res, err := c.Greet(context.Background(), req)
 	if err != nil {
-		log.Fatalln("UNexpectEd Error while fetcing the data ", err)
+		log.Fatalln("UnexpectEd Error while fetcing the data ", err)
 	}
 	fmt.Println(res)
 }
