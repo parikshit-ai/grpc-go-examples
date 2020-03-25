@@ -17,4 +17,5 @@ func main() {
 
 	c := greetpb.NewGreetServiceClient(cc)
 	fmt.Printf("server created %v", c)
+
 }
