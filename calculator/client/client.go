@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 
 	"github.com/parikshit-ai/go-proto/calculator/calculatorpb"
@@ -16,7 +17,21 @@ func main() {
 	}
 	defer cc.Close()
 	c := calculatorpb.NewCalculateClient(cc)
-	doUnary(c)
+	req := &calculatorpb.PrimeNoDecompositionRequest{
+		N: 210,
+	}
+	resSream, _ := c.PrimeNoDecomposition(context.Background(), req)
+	for {
+		msg, err := resSream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatalln("someting went wrong 500 with err:", err)
+		}
+		fmt.Println(msg.GetN())
+	}
+	// doUnary(c)
 	fmt.Println("Client is running")
 }
 
