@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 
 	"github.com/parikshit-ai/go-proto/greet/greetpb"
@@ -18,7 +19,25 @@ func main() {
 
 	c := greetpb.NewGreetServiceClient(cc)
 	fmt.Printf("server created %v", c)
-	doUnary(c)
+	// doUnary(c)
+	req := &greetpb.GreetManyTimeRequest{
+		Greeting: &greetpb.Greeting{
+			FirstName: "Streaming Pari",
+			LastName:  "Streaming Singh",
+		},
+	}
+	fmt.Println("Server Streaming rpc")
+	resStream, _ := c.GreetManyTimes(context.Background(), req)
+	for {
+		msg, err := resStream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			fmt.Println("Error while straming :", err)
+		}
+		fmt.Println("Response from GreetManyTImes ", msg.GetResult())
+	}
 }
 
 func doUnary(c greetpb.GreetServiceClient) {
