@@ -22,7 +22,74 @@ func main() {
 	fmt.Printf("server created %v", c)
 	// doUnary(c)
 	// doStreaming(c)
-	doClientStreaming(c)
+	// doClientStreaming(c)
+	// sending and reciving in paraller so we will use goRoutine and Channel
+	doBiDiStream(c)
+}
+func doBiDiStream(c greetpb.GreetServiceClient) {
+	// we will create a stream while invocking the client
+	stream, err := c.GreetEveryone(context.Background())
+	if err != nil {
+		log.Fatalln("Error while creating the stram Err", err)
+	}
+	requests := []*greetpb.GreetEveryoneRequest{
+		&greetpb.GreetEveryoneRequest{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Pari",
+			},
+		},
+		&greetpb.GreetEveryoneRequest{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Pari1",
+			},
+		},
+		&greetpb.GreetEveryoneRequest{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Pari2",
+			},
+		},
+		&greetpb.GreetEveryoneRequest{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Pari3",
+			},
+		},
+		&greetpb.GreetEveryoneRequest{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Pari4",
+			},
+		},
+	}
+	waitc := make(chan struct{}) // channel to block
+	// we send the bunch of message to the client (go routine)
+	go func() {
+		// function to send the bunch of message
+		for _, req := range requests {
+			fmt.Println("Request send is ", req)
+			stream.Send(req)
+			time.Sleep(time.Second)
+		}
+		// close the stream
+		stream.CloseSend()
+	}()
+	// we recive bunch of message from client (go routine)
+	go func() {
+		// function to recive bunch of message
+		for {
+			res, err := stream.Recv()
+			if err == io.EOF {
+				// reach the end
+				break
+			}
+			if err != nil {
+				log.Fatalln("Error while reciving", err)
+				close(waitc)
+			}
+			fmt.Println("recived ", res)
+		}
+		close(waitc)
+	}()
+	// we will block everything until its done
+	<-waitc
 }
 func doClientStreaming(c greetpb.GreetServiceClient) {
 	fmt.Println("Started doing client streaming")
