@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"time"
 
 	"github.com/parikshit-ai/go-proto/greet/greetpb"
 	"google.golang.org/grpc"
@@ -20,6 +21,54 @@ func main() {
 	c := greetpb.NewGreetServiceClient(cc)
 	fmt.Printf("server created %v", c)
 	// doUnary(c)
+	// doStreaming(c)
+	doClientStreaming(c)
+}
+func doClientStreaming(c greetpb.GreetServiceClient) {
+	fmt.Println("Started doing client streaming")
+	stream, err := c.LongGreet(context.Background())
+	if err != nil {
+		log.Fatalln("Error while calling longGreet", err)
+	}
+	requests := []*greetpb.LongGreetRequest{
+		&greetpb.LongGreetRequest{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Pari",
+			},
+		},
+		&greetpb.LongGreetRequest{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Pari1",
+			},
+		},
+		&greetpb.LongGreetRequest{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Pari2",
+			},
+		},
+		&greetpb.LongGreetRequest{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Pari3",
+			},
+		},
+		&greetpb.LongGreetRequest{
+			Greeting: &greetpb.Greeting{
+				FirstName: "Pari4",
+			},
+		},
+	}
+	for _, req := range requests {
+		fmt.Println("Sending stream current data is ", req)
+		stream.Send(req)
+		time.Sleep(100 * time.Millisecond)
+	}
+	res, err := stream.CloseAndRecv()
+	if err != nil {
+		fmt.Println("Error while getting response from long greet Err :", err)
+	}
+	fmt.Printf("LONG GREET RESPONSE IS %+v", res)
+}
+func doStreaming(c greetpb.GreetServiceClient) {
 	req := &greetpb.GreetManyTimeRequest{
 		Greeting: &greetpb.Greeting{
 			FirstName: "Streaming Pari",
