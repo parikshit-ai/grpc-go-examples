@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"time"
@@ -38,6 +39,28 @@ func (*server) PrimeNoDecomposition(req *calculatorpb.PrimeNoDecompositionReques
 		}
 	}
 	return nil
+}
+
+func (*server) GetAvg(stream calculatorpb.Calculate_GetAvgServer) error {
+	fmt.Println("Starting getavg from serverside")
+	var ans float32
+	var cnt int32
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			// send the response
+			ans /= float32(cnt)
+			res := calculatorpb.GetAvgResponse{
+				N: ans,
+			}
+			return stream.SendAndClose(&res)
+		}
+		if err != nil {
+			log.Fatalln("Error while reciving the stream Err: ", err)
+		}
+		ans += float32(req.GetN())
+		cnt++
+	}
 }
 func main() {
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")

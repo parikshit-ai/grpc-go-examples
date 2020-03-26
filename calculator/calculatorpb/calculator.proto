@@ -19,9 +19,19 @@ message PrimeNoDecompositionResponse {
     int32 n = 1;
 }
 
+message GetAvgRequest {
+    int32 n = 1;
+}
+
+message GetAvgResponse {
+    float n = 1;
+}
+
 service Calculate {
     // Unary
     rpc Add(Request) returns (Response) {};
     // Server side streaming
     rpc PrimeNoDecomposition(PrimeNoDecompositionRequest) returns (stream PrimeNoDecompositionResponse) {}; 
+    // client side streaming
+    rpc GetAvg(stream GetAvgRequest) returns (GetAvgResponse) {};
 }

@@ -188,11 +188,91 @@ func (m *PrimeNoDecompositionResponse) GetN() int32 {
 	return 0
 }
 
+type GetAvgRequest struct {
+	N                    int32    `protobuf:"varint,1,opt,name=n,proto3" json:"n,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetAvgRequest) Reset()         { *m = GetAvgRequest{} }
+func (m *GetAvgRequest) String() string { return proto.CompactTextString(m) }
+func (*GetAvgRequest) ProtoMessage()    {}
+func (*GetAvgRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f42938f8c8365cf, []int{4}
+}
+
+func (m *GetAvgRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetAvgRequest.Unmarshal(m, b)
+}
+func (m *GetAvgRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetAvgRequest.Marshal(b, m, deterministic)
+}
+func (m *GetAvgRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetAvgRequest.Merge(m, src)
+}
+func (m *GetAvgRequest) XXX_Size() int {
+	return xxx_messageInfo_GetAvgRequest.Size(m)
+}
+func (m *GetAvgRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetAvgRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetAvgRequest proto.InternalMessageInfo
+
+func (m *GetAvgRequest) GetN() int32 {
+	if m != nil {
+		return m.N
+	}
+	return 0
+}
+
+type GetAvgResponse struct {
+	N                    float32  `protobuf:"fixed32,1,opt,name=n,proto3" json:"n,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetAvgResponse) Reset()         { *m = GetAvgResponse{} }
+func (m *GetAvgResponse) String() string { return proto.CompactTextString(m) }
+func (*GetAvgResponse) ProtoMessage()    {}
+func (*GetAvgResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f42938f8c8365cf, []int{5}
+}
+
+func (m *GetAvgResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetAvgResponse.Unmarshal(m, b)
+}
+func (m *GetAvgResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetAvgResponse.Marshal(b, m, deterministic)
+}
+func (m *GetAvgResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetAvgResponse.Merge(m, src)
+}
+func (m *GetAvgResponse) XXX_Size() int {
+	return xxx_messageInfo_GetAvgResponse.Size(m)
+}
+func (m *GetAvgResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetAvgResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetAvgResponse proto.InternalMessageInfo
+
+func (m *GetAvgResponse) GetN() float32 {
+	if m != nil {
+		return m.N
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*Request)(nil), "Request")
 	proto.RegisterType((*Response)(nil), "Response")
 	proto.RegisterType((*PrimeNoDecompositionRequest)(nil), "PrimeNoDecompositionRequest")
 	proto.RegisterType((*PrimeNoDecompositionResponse)(nil), "PrimeNoDecompositionResponse")
+	proto.RegisterType((*GetAvgRequest)(nil), "GetAvgRequest")
+	proto.RegisterType((*GetAvgResponse)(nil), "GetAvgResponse")
 }
 
 func init() {
@@ -200,7 +280,7 @@ func init() {
 }
 
 var fileDescriptor_7f42938f8c8365cf = []byte{
-	// 206 bytes of a gzipped FileDescriptorProto
+	// 250 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0x48, 0x4e, 0xcc, 0x49,
 	0x2e, 0xcd, 0x49, 0x2c, 0xc9, 0x2f, 0xd2, 0x47, 0x30, 0x0b, 0x92, 0x90, 0x38, 0x7a, 0x05, 0x45,
 	0xf9, 0x25, 0xf9, 0x4a, 0xaa, 0x5c, 0xec, 0x41, 0xa9, 0x85, 0xa5, 0xa9, 0xc5, 0x25, 0x42, 0x3c,
@@ -209,11 +289,14 @@ var fileDescriptor_7f42938f8c8365cf = []byte{
 	0x24, 0xc0, 0xc5, 0x9c, 0x98, 0x57, 0x0c, 0x55, 0x09, 0x62, 0x2a, 0x69, 0x73, 0x49, 0x07, 0x14,
 	0x65, 0xe6, 0xa6, 0xfa, 0xe5, 0xbb, 0xa4, 0x26, 0xe7, 0xe7, 0x16, 0xe4, 0x17, 0x67, 0x96, 0x64,
 	0xe6, 0xe7, 0x21, 0x19, 0x9c, 0x07, 0x33, 0x38, 0x4f, 0x49, 0x87, 0x4b, 0x06, 0xbb, 0x62, 0xa8,
-	0xf1, 0x28, 0xaa, 0x8d, 0x9a, 0x18, 0xb9, 0x38, 0x9d, 0xa1, 0x8e, 0x4e, 0x15, 0x92, 0xe1, 0x62,
-	0x76, 0x4c, 0x49, 0x11, 0xe2, 0xd0, 0x83, 0x1a, 0x2d, 0xc5, 0xa9, 0x07, 0xd3, 0xa7, 0xc4, 0x20,
-	0x14, 0xce, 0x25, 0x82, 0xcd, 0x64, 0x21, 0x19, 0x3d, 0x3c, 0xae, 0x93, 0x92, 0xd5, 0xc3, 0xe7,
-	0x1c, 0x25, 0x06, 0x03, 0x46, 0x27, 0xbe, 0x28, 0x1e, 0xe4, 0x50, 0x4c, 0x62, 0x03, 0x87, 0x9d,
-	0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0xeb, 0x49, 0xaf, 0x3c, 0x67, 0x01, 0x00, 0x00,
+	0xf1, 0xa8, 0xaa, 0x65, 0xb9, 0x78, 0xdd, 0x53, 0x4b, 0x1c, 0xcb, 0xd2, 0xb1, 0x1b, 0x26, 0xc7,
+	0xc5, 0x07, 0x93, 0x46, 0xd7, 0xce, 0x14, 0xc4, 0x98, 0x67, 0xb4, 0x91, 0x91, 0x8b, 0xd3, 0x19,
+	0xea, 0xe7, 0x54, 0x21, 0x19, 0x2e, 0x66, 0xc7, 0x94, 0x14, 0x21, 0x0e, 0x3d, 0xa8, 0x61, 0x52,
+	0x9c, 0x7a, 0x30, 0x7d, 0x4a, 0x0c, 0x42, 0xe1, 0x5c, 0x22, 0xd8, 0x1c, 0x26, 0x24, 0xa3, 0x87,
+	0xc7, 0x73, 0x52, 0xb2, 0x7a, 0xf8, 0x7c, 0xa3, 0xc4, 0x60, 0xc0, 0x28, 0xa4, 0xcb, 0xc5, 0x06,
+	0x71, 0xa4, 0x10, 0x9f, 0x1e, 0x8a, 0x67, 0xa4, 0xf8, 0xf5, 0x50, 0x5d, 0xaf, 0xc4, 0xa0, 0xc1,
+	0xe8, 0xc4, 0x17, 0xc5, 0x83, 0x1c, 0x67, 0x49, 0x6c, 0xe0, 0x98, 0x32, 0x06, 0x04, 0x00, 0x00,
+	0xff, 0xff, 0x41, 0xbf, 0x80, 0x79, 0xd5, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -232,6 +315,8 @@ type CalculateClient interface {
 	Add(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 	// Server side streaming
 	PrimeNoDecomposition(ctx context.Context, in *PrimeNoDecompositionRequest, opts ...grpc.CallOption) (Calculate_PrimeNoDecompositionClient, error)
+	// client side streaming
+	GetAvg(ctx context.Context, opts ...grpc.CallOption) (Calculate_GetAvgClient, error)
 }
 
 type calculateClient struct {
@@ -283,12 +368,48 @@ func (x *calculatePrimeNoDecompositionClient) Recv() (*PrimeNoDecompositionRespo
 	return m, nil
 }
 
+func (c *calculateClient) GetAvg(ctx context.Context, opts ...grpc.CallOption) (Calculate_GetAvgClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Calculate_serviceDesc.Streams[1], "/Calculate/GetAvg", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &calculateGetAvgClient{stream}
+	return x, nil
+}
+
+type Calculate_GetAvgClient interface {
+	Send(*GetAvgRequest) error
+	CloseAndRecv() (*GetAvgResponse, error)
+	grpc.ClientStream
+}
+
+type calculateGetAvgClient struct {
+	grpc.ClientStream
+}
+
+func (x *calculateGetAvgClient) Send(m *GetAvgRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *calculateGetAvgClient) CloseAndRecv() (*GetAvgResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(GetAvgResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // CalculateServer is the server API for Calculate service.
 type CalculateServer interface {
 	// Unary
 	Add(context.Context, *Request) (*Response, error)
 	// Server side streaming
 	PrimeNoDecomposition(*PrimeNoDecompositionRequest, Calculate_PrimeNoDecompositionServer) error
+	// client side streaming
+	GetAvg(Calculate_GetAvgServer) error
 }
 
 // UnimplementedCalculateServer can be embedded to have forward compatible implementations.
@@ -300,6 +421,9 @@ func (*UnimplementedCalculateServer) Add(ctx context.Context, req *Request) (*Re
 }
 func (*UnimplementedCalculateServer) PrimeNoDecomposition(req *PrimeNoDecompositionRequest, srv Calculate_PrimeNoDecompositionServer) error {
 	return status.Errorf(codes.Unimplemented, "method PrimeNoDecomposition not implemented")
+}
+func (*UnimplementedCalculateServer) GetAvg(srv Calculate_GetAvgServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetAvg not implemented")
 }
 
 func RegisterCalculateServer(s *grpc.Server, srv CalculateServer) {
@@ -345,6 +469,32 @@ func (x *calculatePrimeNoDecompositionServer) Send(m *PrimeNoDecompositionRespon
 	return x.ServerStream.SendMsg(m)
 }
 
+func _Calculate_GetAvg_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CalculateServer).GetAvg(&calculateGetAvgServer{stream})
+}
+
+type Calculate_GetAvgServer interface {
+	SendAndClose(*GetAvgResponse) error
+	Recv() (*GetAvgRequest, error)
+	grpc.ServerStream
+}
+
+type calculateGetAvgServer struct {
+	grpc.ServerStream
+}
+
+func (x *calculateGetAvgServer) SendAndClose(m *GetAvgResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *calculateGetAvgServer) Recv() (*GetAvgRequest, error) {
+	m := new(GetAvgRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 var _Calculate_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "Calculate",
 	HandlerType: (*CalculateServer)(nil),
@@ -359,6 +509,11 @@ var _Calculate_serviceDesc = grpc.ServiceDesc{
 			StreamName:    "PrimeNoDecomposition",
 			Handler:       _Calculate_PrimeNoDecomposition_Handler,
 			ServerStreams: true,
+		},
+		{
+			StreamName:    "GetAvg",
+			Handler:       _Calculate_GetAvg_Handler,
+			ClientStreams: true,
 		},
 	},
 	Metadata: "calculator/calculatorpb/calculator.proto",
