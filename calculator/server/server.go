@@ -62,6 +62,31 @@ func (*server) GetAvg(stream calculatorpb.Calculate_GetAvgServer) error {
 		cnt++
 	}
 }
+
+func (*server) GetMax(stream calculatorpb.Calculate_GetMaxServer) error {
+	fmt.Println("Inside getMax serverside")
+	var result int32 = -1
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			// end from client side
+			return nil
+		}
+		if err != nil {
+			log.Fatalln("Error while reciving the data ", err)
+		}
+		if req.GetN() > result {
+			errSend := stream.Send(&calculatorpb.GetMaxResponse{
+				N: req.GetN(),
+			})
+			if errSend != nil {
+				log.Fatalln("Error while sending the data to client")
+				return errSend
+			}
+			result = req.GetN()
+		}
+	}
+}
 func main() {
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")
 	if err != nil {

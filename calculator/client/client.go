@@ -20,7 +20,8 @@ func main() {
 	c := calculatorpb.NewCalculateClient(cc)
 	// doUnary(c)
 	// doServerStream(c)
-	doClientStream(c)
+	// doClientStream(c)
+	doBiDirectional(c)
 	fmt.Println("Client is running")
 }
 func doUnary(c calculatorpb.CalculateClient) {
@@ -82,4 +83,53 @@ func doClientStream(c calculatorpb.CalculateClient) {
 		fmt.Println("Error while getting the res", err)
 	}
 	fmt.Println("Got the response : ", res)
+}
+func doBiDirectional(c calculatorpb.CalculateClient) {
+	stream, err := c.GetMax(context.Background())
+	if err != nil {
+		log.Fatalln("Error while creating stram Err", err)
+	}
+	requests := []*calculatorpb.GetMaxRequest{
+		&calculatorpb.GetMaxRequest{
+			N: 3,
+		},
+		&calculatorpb.GetMaxRequest{
+			N: 5,
+		},
+		&calculatorpb.GetMaxRequest{
+			N: 6,
+		},
+		&calculatorpb.GetMaxRequest{
+			N: 5,
+		},
+		&calculatorpb.GetMaxRequest{
+			N: 77,
+		},
+	}
+	waitc := make(chan struct{}) //to block
+	// to send the data
+	go func() {
+		for i, req := range requests {
+			fmt.Println("Request send is ", req, i)
+			stream.Send(req)
+			time.Sleep(time.Second)
+		}
+		stream.CloseSend()
+	}()
+	// to recive the request
+	go func() {
+		for {
+			res, err := stream.Recv()
+			if err == io.EOF {
+				fmt.Println("EOF")
+				break
+			}
+			if err != nil {
+				log.Fatalln("Error While reciving the data Err", err)
+			}
+			fmt.Println("Max no is ", res)
+		}
+		close(waitc)
+	}()
+	<-waitc
 }

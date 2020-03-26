@@ -26,6 +26,12 @@ message GetAvgRequest {
 message GetAvgResponse {
     float n = 1;
 }
+message GetMaxRequest {
+    int32 n = 1;
+}
+message GetMaxResponse {
+    int32 n = 1;
+}
 
 service Calculate {
     // Unary
@@ -34,4 +40,6 @@ service Calculate {
     rpc PrimeNoDecomposition(PrimeNoDecompositionRequest) returns (stream PrimeNoDecompositionResponse) {}; 
     // client side streaming
     rpc GetAvg(stream GetAvgRequest) returns (GetAvgResponse) {};
+    // get maximum of the input stream everytime
+    rpc GetMax(stream GetMaxRequest) returns (stream GetMaxResponse) {};
 }
