@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math"
 	"net"
 	"time"
 
 	"github.com/parikshit-ai/go-proto/calculator/calculatorpb"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type server struct{}
@@ -86,6 +89,21 @@ func (*server) GetMax(stream calculatorpb.Calculate_GetMaxServer) error {
 			result = req.GetN()
 		}
 	}
+}
+
+func (*server) GetSqureRoot(ctx context.Context, req *calculatorpb.SquareRootRequest) (*calculatorpb.SquareRootResponse, error) {
+	fmt.Println("Inside server method of getSquareRoot")
+	n := req.GetN()
+	if n < 0 {
+		// thorw an error
+		return nil, status.Errorf(
+			codes.InvalidArgument,
+			fmt.Sprintf("Recived a negetive number, %v", n),
+		)
+	}
+	return &calculatorpb.SquareRootResponse{
+		N: math.Sqrt(float64(n)),
+	}, nil
 }
 func main() {
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")

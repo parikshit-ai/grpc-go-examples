@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+	fmt.Println("Client is running")
 	cc, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalln("Error while dialing err: ", err)
@@ -21,8 +22,8 @@ func main() {
 	// doUnary(c)
 	// doServerStream(c)
 	// doClientStream(c)
-	doBiDirectional(c)
-	fmt.Println("Client is running")
+	// doBiDirectional(c)
+	doErrorUnary(c)
 }
 func doUnary(c calculatorpb.CalculateClient) {
 	fmt.Println("inside dpUnary client")
@@ -132,4 +133,28 @@ func doBiDirectional(c calculatorpb.CalculateClient) {
 		close(waitc)
 	}()
 	<-waitc
+}
+
+func doErrorUnary(c calculatorpb.CalculateClient) {
+	fmt.Println("Inside doError unary client")
+	//  do error call
+	req := &calculatorpb.SquareRootRequest{
+		N: -10,
+	}
+	res, err := c.GetSqureRoot(context.Background(), req)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(res)
+	}
+	// do correct call
+	cReq := &calculatorpb.SquareRootRequest{
+		N: 10,
+	}
+	correctRes, cErr := c.GetSqureRoot(context.Background(), cReq)
+	if cErr != nil {
+		fmt.Println(cErr)
+	} else {
+		fmt.Println(correctRes)
+	}
 }

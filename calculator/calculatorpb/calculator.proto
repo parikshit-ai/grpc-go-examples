@@ -33,6 +33,14 @@ message GetMaxResponse {
     int32 n = 1;
 }
 
+message SquareRootRequest {
+    int32 n = 1;
+}
+
+message SquareRootResponse {
+    double n = 1;
+}
+
 service Calculate {
     // Unary
     rpc Add(Request) returns (Response) {};
@@ -42,4 +50,7 @@ service Calculate {
     rpc GetAvg(stream GetAvgRequest) returns (GetAvgResponse) {};
     // get maximum of the input stream everytime
     rpc GetMax(stream GetMaxRequest) returns (stream GetMaxResponse) {};
+    // Unary API for square root
+    // send the error if error is negative error will be of type INVALID_ARGUMENT
+    rpc GetSqureRoot(SquareRootRequest) returns (SquareRootResponse) {};
 }
