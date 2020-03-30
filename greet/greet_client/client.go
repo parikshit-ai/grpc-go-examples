@@ -9,6 +9,8 @@ import (
 
 	"github.com/parikshit-ai/go-proto/greet/greetpb"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func main() {
@@ -24,7 +26,36 @@ func main() {
 	// doStreaming(c)
 	// doClientStreaming(c)
 	// sending and reciving in paraller so we will use goRoutine and Channel
-	doBiDiStream(c)
+	// doBiDiStream(c)
+	doUnaryWithDeadLine(c, 5) // should complete
+	doUnaryWithDeadLine(c, 1) // shoud timeout
+}
+func doUnaryWithDeadLine(c greetpb.GreetServiceClient, s time.Duration) {
+	fmt.Println("calling doUnaryWithDeadLine in RPC..")
+	req := &greetpb.GreetWithDeadLineRequest{
+		Greeting: &greetpb.Greeting{
+			FirstName: "Pari",
+			LastName:  "Singh",
+		},
+	}
+	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(time.Second*s))
+	defer cancel()
+
+	res, err := c.GreetWithDeadline(ctx, req)
+	if err != nil {
+		statusCode, ok := status.FromError(err)
+		if ok {
+			if statusCode.Code() == codes.DeadlineExceeded {
+				fmt.Println("Time out hit Deadline exceeded ")
+			} else {
+				fmt.Println("Something went wrong", statusCode.Code())
+			}
+		} else {
+			log.Fatalln("UnexpectEd Error while fetcing the data ", err)
+		}
+		return
+	}
+	fmt.Println(res)
 }
 func doBiDiStream(c greetpb.GreetServiceClient) {
 	// we will create a stream while invocking the client

@@ -11,6 +11,8 @@ import (
 
 	"github.com/parikshit-ai/go-proto/greet/greetpb"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type server struct{}
@@ -77,7 +79,23 @@ func (*server) GreetEveryone(stream greetpb.GreetService_GreetEveryoneServer) er
 		}
 	}
 }
-
+func (*server) GreetWithDeadline(ctx context.Context, req *greetpb.GreetWithDeadLineRequest) (*greetpb.GreetWithDeadLineResponse, error) {
+	fmt.Println("Inside GreetWithDeadline req")
+	for i := 0; i < 3; i++ {
+		if ctx.Err() == context.Canceled {
+			fmt.Println("Client cancelled the request")
+			return nil, status.Error(codes.Canceled, "Client canceled the request")
+		}
+		time.Sleep(time.Second)
+	}
+	fmt.Println("Greet function is invoked with req: ", req)
+	firstName := req.GetGreeting().GetFirstName()
+	result := &greetpb.GreetWithDeadLineResponse{
+		Result: firstName,
+	}
+	fmt.Println(result)
+	return result, nil
+}
 func main() {
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")
 	if err != nil {
