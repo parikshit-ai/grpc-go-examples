@@ -27,8 +27,8 @@ func main() {
 	// doClientStreaming(c)
 	// sending and reciving in paraller so we will use goRoutine and Channel
 	// doBiDiStream(c)
-	doUnaryWithDeadLine(c, 5) // should complete
-	doUnaryWithDeadLine(c, 1) // shoud timeout
+	// doUnaryWithDeadLine(c, 5) // should complete
+	// doUnaryWithDeadLine(c, 1) // shoud timeout
 }
 func doUnaryWithDeadLine(c greetpb.GreetServiceClient, s time.Duration) {
 	fmt.Println("calling doUnaryWithDeadLine in RPC..")
